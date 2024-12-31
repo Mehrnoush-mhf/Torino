@@ -129,7 +129,7 @@ class TourPage extends StatelessWidget {
           Expanded(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              color: AppTheme.secondaryBackgroundColor.withOpacity(0.6),
+              color: AppTheme.secondaryBackgroundColor.withValues(alpha: 0.6),
               height: MediaQuery.sizeOf(context).height * 0.05,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

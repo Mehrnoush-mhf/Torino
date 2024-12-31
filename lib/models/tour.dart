@@ -1,8 +1,27 @@
+import 'package:hive_flutter/hive_flutter.dart';
+part 'tour.g.dart';
+@HiveType(typeId: 0)
 class Tour {
-  String name, description, category, location, imageUrl;
+  @HiveField(0)
+  String name;
+  @HiveField(1)
+  String description;
+  @HiveField(2)
+  String category;
+  @HiveField(3)
+  String location;
+  @HiveField(4)
+  String imageUrl;
+  @HiveField(5)
   double price;
-  int availableSeats, id;
-  DateTime startDate, endDate;
+  @HiveField(6)
+  int availableSeats;
+  @HiveField(7)
+  int id;
+  @HiveField(8)
+  DateTime startDate;
+  @HiveField(9)
+  DateTime endDate;
 
   Tour({
     required this.id,
@@ -15,16 +34,6 @@ class Tour {
     required this.startDate,
     required this.endDate,
     required this.imageUrl,
-  });
-}
-
-class Comment {
-  String name, comment, tour;
-
-  Comment({
-    required this.name,
-    required this.comment,
-    required this.tour,
   });
 }
 
@@ -301,37 +310,4 @@ List<String> categoryAssets = [
   'assets/images/category/historical.jpg',
   'assets/images/category/nature.jpg',
   'assets/images/category/fun.jpg',
-];
-
-final List<Comment> comments = [
-  Comment(
-    name: 'محمد احمدی',
-    comment:
-        'این تور یکی از بهترین تجربیات من بود. بسیار خوش گذشت و همه چیز طبق برنامه‌ریزی پیش رفت. راهنمای تور فوق‌العاده بود و همه چیز را به دقت توضیح می‌داد.',
-    tour: 'تور اصفهان',
-  ),
-  Comment(
-    name: 'سارا علیزاده',
-    comment:
-        'سفر خیلی جالبی بود و از تمام لحظات لذت بردم. من عاشق گشت و گذار در این مکان‌های زیبا هستم. از همه چیز راضی بودم و قطعاً دوباره سفر خواهم کرد.',
-    tour: 'تور شیراز',
-  ),
-  Comment(
-    name: 'حسین فریدونی',
-    comment:
-        'راهنمای تور بسیار حرفه‌ای بود و اطلاعات خوبی ارائه کرد. هر مکان دیدنی که رفتیم، اطلاعات زیادی در مورد تاریخ و فرهنگ آنجا دریافت کردیم. همه چیز عالی بود.',
-    tour: 'تور تهران',
-  ),
-  Comment(
-    name: 'مریم نوروزی',
-    comment:
-        'یک تجربه عالی بود. از جزئیات سفر تا برنامه‌ریزی همه چیز عالی بود. من از این که این تور را انتخاب کردم بسیار خوشحالم. همه چیز درست و به موقع انجام شد.',
-    tour: 'تور کیش',
-  ),
-  Comment(
-    name: 'فرهاد حسینی',
-    comment:
-        'تور بسیار جذاب و پر از خاطرات خوب بود. ما در این سفر با فرهنگ و آداب و رسوم مناطق مختلف آشنا شدیم. از همه لحظات این سفر لذت بردیم و قطعاً پیشنهاد می‌کنم.',
-    tour: 'تور تبریز',
-  ),
 ];
