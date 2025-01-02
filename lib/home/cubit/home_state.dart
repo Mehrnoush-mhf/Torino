@@ -8,4 +8,9 @@ class HomeLogoutState extends HomeActionState {}
 
 class HomeLikeTourState extends HomeActionState {}
 
+class HomeSearchResultsState extends HomeState {
+  final List<Tour> results;
+  HomeSearchResultsState(this.results);
+}
+
 final class HomeInitial extends HomeState {}

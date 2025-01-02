@@ -73,10 +73,10 @@ class Home extends StatelessWidget {
           backgroundColor: AppTheme.secondaryBackgroundColor,
           body: IndexedStack(
             index: BlocProvider.of<HomeCubit>(context).index,
-            children: const [
-              HomePage(),
+            children: [
+              const HomePage(),
               FavoritesPage(),
-              ProfilePage(),
+              const ProfilePage(),
             ],
           ),
         );

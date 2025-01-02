@@ -28,4 +28,15 @@ class HomeCubit extends Cubit<HomeState> {
   bool isTourLiked(Tour tour) {
     return user.likedTours.contains(tour);
   }
+
+  void closeSearchResults() {
+    emit(HomeInitial());
+  }
+
+  void searchFavorites(String query) {
+    final results = user.likedTours.where((tour) {
+      return tour.name.contains(query) || tour.location.contains(query);
+    }).toList();
+    emit(HomeSearchResultsState(results));
+  }
 }

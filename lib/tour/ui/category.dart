@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:torino/constants/colors.dart';
-import 'package:torino/home/cubit/home_cubit.dart';
 import 'package:torino/models/tour.dart';
 import 'package:torino/tour/ui/tour.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CategoryPage extends StatelessWidget {
   final String category;
