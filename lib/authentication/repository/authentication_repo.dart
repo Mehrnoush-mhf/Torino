@@ -31,9 +31,4 @@ class AuthenticationRepository {
     Box<User> loginUserBox = await Hive.openBox<User>(loginBoxName);
     loginUserBox.clear();
   }
-
-  static Future clearBox() async {
-    Box<User> userBox = await Hive.openBox<User>(usersBox);
-    userBox.clear();
-  }
 }

@@ -17,16 +17,16 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
-        if(state is LoginSuccessfulState) {
+        if (state is LoginSuccessfulState) {
+          BlocProvider.of<HomeCubit>(context).user = state.user;
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                create: (context) => HomeCubit(user: state.user),
-                child: Home(),
-              ),
+              builder: (context) => Home(),
             ),
           );
+        } else if (state is LoginFailedState) {
+          print('login failed!');
         }
       },
       child: Scaffold(
@@ -85,7 +85,8 @@ class LoginPage extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             if (_key.currentState!.validate()) {
-                              BlocProvider.of<AuthenticationCubit>(context).login(
+                              BlocProvider.of<AuthenticationCubit>(context)
+                                  .login(
                                 usernameController.text,
                                 passwordController.text,
                               );

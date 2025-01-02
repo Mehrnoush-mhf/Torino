@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:torino/authentication/cubit/authentication_cubit.dart';
-import 'package:torino/authentication/repository/authentication_repo.dart';
 import 'package:torino/authentication/ui/widgets/form_field.dart';
 import 'package:torino/constants/colors.dart';
 import 'package:torino/home/cubit/home_cubit.dart';
@@ -20,19 +19,17 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
-        if(state is RegisterCompletedState) {
+        if (state is RegisterCompletedState) {
+          BlocProvider.of<HomeCubit>(context).user = state.user;
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                create: (context) => HomeCubit(user: state.user),
-                child: Home(),
-              ),
+              builder: (context) => Home(),
             ),
           );
-        } else if(state is UsernameExistsState) {
+        } else if (state is UsernameExistsState) {
           print('username exists');
-        } else if(state is EmailExistsState) {
+        } else if (state is EmailExistsState) {
           print('email exists');
         }
       },

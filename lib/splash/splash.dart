@@ -10,18 +10,16 @@ class Splash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<AuthenticationCubit>(context).checkUserLoggedIn();
     BlocProvider.of<AuthenticationCubit>(context).init();
+    BlocProvider.of<AuthenticationCubit>(context).checkUserLoggedIn();
     return BlocListener<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
         if (state is UserLoggedInState) {
+          BlocProvider.of<HomeCubit>(context).user = state.user;
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                create: (context) => HomeCubit(user: state.user),
-                child: Home(),
-              ),
+              builder: (context) => Home(),
             ),
           );
         }

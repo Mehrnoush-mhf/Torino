@@ -1,12 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:torino/authentication/repository/authentication_repo.dart';
 import 'package:torino/constants/colors.dart';
 import 'package:torino/home/cubit/home_cubit.dart';
-import 'package:torino/models/tour.dart';
-import 'package:torino/tour/ui/category.dart';
-import 'package:torino/tour/ui/tour.dart';
+import 'package:torino/home/ui/favorites_page.dart';
+import 'package:torino/home/ui/home_page.dart';
+import 'package:torino/home/ui/profile_page.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 class Home extends StatelessWidget {
   final CarouselSliderController buttonCarouselController =
@@ -16,269 +16,71 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(BlocProvider.of<HomeCubit>(context).user.username);
-    return BlocListener<HomeCubit, HomeState>(
+    return BlocConsumer<HomeCubit, HomeState>(
       listener: (context, state) {
         if (state is HomeLogoutState) {
-          BlocProvider.of<HomeCubit>(context).close();
           Navigator.of(context).pushReplacementNamed('splash');
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppTheme.secondaryBackgroundColor,
-          elevation: 0,
-          leading: IconButton(
-            onPressed: () {
-              BlocProvider.of<HomeCubit>(context).logout();
-            },
-            icon: Icon(Icons.logout_rounded),
+      builder: (context, state) {
+        return Scaffold(
+          bottomNavigationBar: Directionality(
+            textDirection: TextDirection.rtl,
+            child: GNav(
+              selectedIndex: BlocProvider.of<HomeCubit>(context).index,
+              haptic: true,
+              tabBorderRadius: 15,
+              curve: Curves.easeOutExpo,
+              gap: 8,
+              tabMargin: const EdgeInsets.all(8.0),
+              color: Colors.grey[800],
+              activeColor: AppTheme.primaryColor,
+              iconSize: 24,
+              tabBackgroundColor: AppTheme.primaryColor.withValues(alpha: 0.2),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 5,
+              ),
+              tabs: [
+                GButton(
+                  onPressed: () {
+                    BlocProvider.of<HomeCubit>(context).changeIndex(0);
+                  },
+                  icon: Icons.home,
+                  text: 'خانه',
+                ),
+                GButton(
+                  onPressed: () {
+                    BlocProvider.of<HomeCubit>(context).changeIndex(1);
+                  },
+                  icon: Icons.favorite,
+                  text: 'موردعلاقه ها',
+                ),
+                GButton(
+                  onPressed: () {
+                    BlocProvider.of<HomeCubit>(context).changeIndex(2);
+                  },
+                  icon: Icons.person,
+                  text: 'پروفایل',
+                ),
+              ],
+            ),
           ),
-        ),
-        backgroundColor: AppTheme.secondaryBackgroundColor,
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: TextField(
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: AppTheme.fontFamilyName,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'جستجو',
-                      hintStyle: TextStyle(
-                        color: Colors.black,
-                        fontFamily: AppTheme.fontFamilyName,
-                      ),
-                      suffixIcon: const Icon(Icons.search, color: Colors.black),
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 16.0),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(48),
-                        borderSide: const BorderSide(
-                          color: Colors.black,
-                          width: 1.0,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(48),
-                        borderSide: BorderSide(
-                          color: AppTheme.primaryColor,
-                          width: 2.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'محبوب‌ترین ها',
-                      textDirection: TextDirection.rtl,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: AppTheme.fontFamilyName,
-                        fontWeight: FontWeight.bold,
-                        fontSize: MediaQuery.sizeOf(context).width * 0.05,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              CarouselSlider.builder(
-                options: CarouselOptions(
-                  height: MediaQuery.sizeOf(context).height * 0.3,
-                  disableCenter: true,
-                  enlargeCenterPage: true,
-                  autoPlay: true,
-                  autoPlayAnimationDuration: const Duration(seconds: 3),
-                ),
-                itemCount: 5,
-                itemBuilder:
-                    (BuildContext context, int itemIndex, int pageViewIndex) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              TourPage(tour: tours[itemIndex]),
-                        ),
-                      );
-                    },
-                    child: Stack(
-                      children: [
-                        Positioned.fill(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(tours[itemIndex].imageUrl),
-                                fit: BoxFit.fill,
-                              ),
-                              borderRadius: BorderRadius.circular(48),
-                            ),
-                            padding: const EdgeInsets.all(24),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 10,
-                          right: 10,
-                          left: 10,
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            height: MediaQuery.sizeOf(context).height * 0.14,
-                            width: MediaQuery.sizeOf(context).height * 0.3,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(48),
-                              color: AppTheme.secondaryBackgroundColor,
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      tours[itemIndex].category,
-                                      textDirection: TextDirection.rtl,
-                                      style: TextStyle(
-                                          fontFamily: AppTheme.fontFamilyName),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                    height: MediaQuery.sizeOf(context).height *
-                                        0.005),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "${tours[itemIndex].price.toInt()} تومان",
-                                      textDirection: TextDirection.rtl,
-                                      style: TextStyle(
-                                        fontFamily: AppTheme.fontFamilyName,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      tours[itemIndex].name,
-                                      textDirection: TextDirection.rtl,
-                                      style: TextStyle(
-                                        fontFamily: AppTheme.fontFamilyName,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                    height: MediaQuery.sizeOf(context).height *
-                                        0.005),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      tours[itemIndex].location,
-                                      textDirection: TextDirection.rtl,
-                                      style: TextStyle(
-                                        fontFamily: AppTheme.fontFamilyName,
-                                      ),
-                                    ),
-                                    const Icon(Icons.location_on_outlined),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'دسته‌بندی',
-                      textDirection: TextDirection.rtl,
-                      style: TextStyle(
-                        color: AppTheme.secondaryColor,
-                        fontFamily: AppTheme.fontFamilyName,
-                        fontWeight: FontWeight.bold,
-                        fontSize: MediaQuery.sizeOf(context).width * 0.05,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Directionality(
-                textDirection: TextDirection.rtl,
-                child: SizedBox(
-                  height: MediaQuery.sizeOf(context).height * 0.4,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => CategoryPage(
-                                category: categoryNames[index],
-                              ),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.all(15),
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(color: Colors.black),
-                                  image: DecorationImage(
-                                    image: AssetImage(categoryAssets[index]),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                width: MediaQuery.sizeOf(context).width * 0.6,
-                                height: MediaQuery.sizeOf(context).width * 0.3,
-                              ),
-                              SizedBox(
-                                  height:
-                                      MediaQuery.sizeOf(context).height * 0.01),
-                              Text(
-                                categoryNames[index],
-                                style: TextStyle(
-                                  color: AppTheme.textColor,
-                                  fontFamily: AppTheme.fontFamilyName,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
+          appBar: AppBar(
+            backgroundColor: AppTheme.secondaryBackgroundColor,
+            elevation: 0,
+          ),
+          backgroundColor: AppTheme.secondaryBackgroundColor,
+          body: IndexedStack(
+            index: BlocProvider.of<HomeCubit>(context).index,
+            children: const [
+              HomePage(),
+              FavoritesPage(),
+              ProfilePage(),
             ],
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

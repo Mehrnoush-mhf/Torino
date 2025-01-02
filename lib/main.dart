@@ -3,6 +3,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:torino/authentication/cubit/authentication_cubit.dart';
 import 'package:torino/authentication/ui/login.dart';
 import 'package:torino/authentication/ui/register.dart';
+import 'package:torino/home/cubit/home_cubit.dart';
 import 'package:torino/home/ui/home.dart';
 import 'package:torino/models/tour.dart';
 import 'package:torino/models/user.dart';
@@ -22,8 +23,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthenticationCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthenticationCubit>(
+          create: (context) => AuthenticationCubit(),
+        ),
+        BlocProvider<HomeCubit>(
+          create: (context) => HomeCubit(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         routes: {

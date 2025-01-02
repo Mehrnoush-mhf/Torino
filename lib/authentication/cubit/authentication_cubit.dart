@@ -28,14 +28,11 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }
 
   Future checkUserLoggedIn() async {
-    print('check');
     bool isLoggedIn = await AuthenticationRepository.isUserLoggedIn();
-    print(isLoggedIn);
     if (isLoggedIn) {
       User user = await AuthenticationRepository.getLastUser();
       emit(UserLoggedInState(user: user));
     }
-
   }
 
   void login(String username, String password) {
