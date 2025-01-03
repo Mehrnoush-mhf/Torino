@@ -1,4 +1,5 @@
 part of 'authentication_cubit.dart';
+
 abstract class AuthenticationState {}
 
 abstract class AuthenticationActionState extends AuthenticationState {}
@@ -23,5 +24,7 @@ class UserLoggedInState extends AuthenticationActionState {
   User user;
   UserLoggedInState({required this.user});
 }
+
+class UserNotLoggedInState extends AuthenticationActionState {}
 
 final class AuthenticationInitial extends AuthenticationState {}

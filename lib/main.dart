@@ -9,6 +9,7 @@ import 'package:torino/models/tour.dart';
 import 'package:torino/models/user.dart';
 import 'package:torino/splash/splash.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:torino/splash/splash_page.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -37,7 +38,8 @@ class MyApp extends StatelessWidget {
         routes: {
           'login': (context) => LoginPage(),
           'register': (context) => RegisterPage(),
-          'splash': (context) => const Splash(),
+          'splash': (context) => const SplashPage(),
+          '/splash': (context) => const Splash(),
           '/': (context) => Home(),
         },
         initialRoute: 'splash',

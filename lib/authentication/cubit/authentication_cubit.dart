@@ -32,6 +32,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     if (isLoggedIn) {
       User user = await AuthenticationRepository.getLastUser();
       emit(UserLoggedInState(user: user));
+    } else {
+      emit(UserNotLoggedInState());
     }
   }
 
